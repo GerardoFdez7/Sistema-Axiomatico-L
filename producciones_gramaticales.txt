@@ -1,0 +1,219 @@
+===============================================================================
+                    PRODUCCIONES GRAMATICALES DEL SISTEMA L
+                     Reconocedor de Expresiones Proposicionales
+===============================================================================
+
+1. COMPONENTES DE LA GRAMÁTICA
+
+   1.1 SÍMBOLOS TERMINALES (Alfabeto):
+       • Variables proposicionales: {p, q, r, s, t, u, v, w, x, y, z}
+       • Operadores lógicos: {~, ^, o, =>, <=>}
+       • Signos de puntuación: {(, )}
+       • Constantes: {0, 1}
+
+   1.2 SÍMBOLOS NO TERMINALES:
+       • F (Fórmula)
+       • E (Expresión)
+
+   1.3 SÍMBOLO INICIAL:
+       • F (Fórmula)
+
+===============================================================================
+
+2. PRODUCCIONES GRAMATICALES
+
+   P1: F → E
+       Descripción: Una fórmula es una expresión
+       Justificación: Regla inicial que conecta el símbolo de inicio
+                     con las expresiones del sistema
+
+   P2: E → VARIABLE
+       Descripción: Las variables proposicionales son fórmulas bien formadas
+       Justificación: Regla i de la gramática del Sistema L
+       Donde: VARIABLE ∈ {p, q, r, s, t, u, v, w, x, y, z}
+
+   P3: E → CONSTANTE
+       Descripción: Las constantes son fórmulas bien formadas
+       Justificación: Regla i de la gramática del Sistema L
+       Donde: CONSTANTE ∈ {0, 1}
+
+   P4: E → ~ E
+       Descripción: Si E es una fórmula bien formada, ~E es una fórmula bien formada
+       Justificación: Regla ii de la gramática del Sistema L
+       Precedencia: Máxima (5)
+       Asociatividad: Derecha
+
+   P5: E → E ^ E
+       Descripción: Si E₁ y E₂ son fórmulas bien formadas, E₁^E₂ es una fórmula bien formada
+       Justificación: Regla iii de la gramática del Sistema L (conjunción)
+       Precedencia: 4
+       Asociatividad: Izquierda
+
+   P6: E → E o E
+       Descripción: Si E₁ y E₂ son fórmulas bien formadas, E₁oE₂ es una fórmula bien formada
+       Justificación: Regla iii de la gramática del Sistema L (disyunción)
+       Precedencia: 3
+       Asociatividad: Izquierda
+
+   P7: E → E => E
+       Descripción: Si E₁ y E₂ son fórmulas bien formadas, E₁=>E₂ es una fórmula bien formada
+       Justificación: Regla iii de la gramática del Sistema L (implicación)
+       Precedencia: 2
+       Asociatividad: Izquierda
+
+   P8: E → E <=> E
+       Descripción: Si E₁ y E₂ son fórmulas bien formadas, E₁<=>E₂ es una fórmula bien formada
+       Justificación: Regla iii de la gramática del Sistema L (bicondicional)
+       Precedencia: 1 (mínima)
+       Asociatividad: Izquierda
+
+   P9: E → ( E )
+       Descripción: Si E es una fórmula bien formada, (E) es una fórmula bien formada
+       Justificación: Regla iv de la gramática del Sistema L
+       Nota: Los paréntesis alteran la precedencia natural de los operadores
+
+===============================================================================
+
+3. TABLA DE PRECEDENCIA Y ASOCIATIVIDAD
+
+   ┌─────────────────┬─────────────┬──────────────────┬─────────────────────┐
+   │    Operador     │ Precedencia │  Asociatividad   │     Producción      │
+   ├─────────────────┼─────────────┼──────────────────┼─────────────────────┤
+   │ ~ (Negación)    │      5      │     Derecha      │        P4           │
+   │ ^ (Conjunción)  │      4      │    Izquierda     │        P5           │
+   │ o (Disyunción)  │      3      │    Izquierda     │        P6           │
+   │ => (Implicación)│      2      │    Izquierda     │        P7           │
+   │<=> (Bicondicional)│    1      │    Izquierda     │        P8           │
+   │ ( ) (Paréntesis)│   Máxima    │       N/A        │        P9           │
+   └─────────────────┴─────────────┴──────────────────┴─────────────────────┘
+
+   Nota: Mayor número = Mayor precedencia
+
+===============================================================================
+
+4. EJEMPLOS DE DERIVACIONES
+
+   4.1 Derivación de "p":
+       F → E → VARIABLE → p
+       Producciones usadas: P1, P2
+
+   4.2 Derivación de "~p":
+       F → E → ~E → ~VARIABLE → ~p
+       Producciones usadas: P1, P4, P2
+
+   4.3 Derivación de "(p^q)":
+       F → E → (E) → (E^E) → (VARIABLE^VARIABLE) → (p^q)
+       Producciones usadas: P1, P9, P5, P2, P2
+
+   4.4 Derivación de "p=>q":
+       F → E → E=>E → VARIABLE=>VARIABLE → p=>q
+       Producciones usadas: P1, P7, P2, P2
+
+   4.5 Derivación de "((p=>q)^p)":
+       F → E → (E) → (E^E) → ((E)^E) → ((E=>E)^E) → 
+       ((VARIABLE=>VARIABLE)^VARIABLE) → ((p=>q)^p)
+       Producciones usadas: P1, P9, P5, P9, P7, P2, P2, P2
+
+   4.6 Derivación de "~(p^q)":
+       F → E → ~E → ~(E) → ~(E^E) → ~(VARIABLE^VARIABLE) → ~(p^q)
+       Producciones usadas: P1, P4, P9, P5, P2, P2
+
+   4.7 Derivación de "(p<=>~p)":
+       F → E → (E) → (E<=>E) → (VARIABLE<=>E) → 
+       (VARIABLE<=>~E) → (VARIABLE<=>~VARIABLE) → (p<=>~p)
+       Producciones usadas: P1, P9, P8, P2, P4, P2
+
+===============================================================================
+
+5. GRAMÁTICA EN NOTACIÓN BNF (Backus-Naur Form)
+
+   <formula> ::= <expresion>
+
+   <expresion> ::= <variable>
+                 | <constante>
+                 | "~" <expresion>
+                 | <expresion> "^" <expresion>
+                 | <expresion> "o" <expresion>
+                 | <expresion> "=>" <expresion>
+                 | <expresion> "<=>" <expresion>
+                 | "(" <expresion> ")"
+
+   <variable> ::= "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
+
+   <constante> ::= "0" | "1"
+
+===============================================================================
+
+6. GRAMÁTICA EN NOTACIÓN EBNF (Extended Backus-Naur Form)
+
+   formula = expresion ;
+
+   expresion = variable
+             | constante
+             | "~" expresion
+             | expresion "^" expresion
+             | expresion "o" expresion
+             | expresion "=>" expresion
+             | expresion "<=>" expresion
+             | "(" expresion ")" ;
+
+   variable = "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" ;
+
+   constante = "0" | "1" ;
+
+===============================================================================
+
+7. PROPIEDADES DE LA GRAMÁTICA
+
+   7.1 TIPO DE GRAMÁTICA:
+       • Gramática libre de contexto (Tipo 2 en la jerarquía de Chomsky)
+       • No ambigua (debido a la definición explícita de precedencia)
+       • Recursiva por la izquierda (operadores binarios)
+
+   7.2 CARACTERÍSTICAS:
+       • Genera exactamente las fórmulas bien formadas del Sistema L
+       • Respeta la precedencia natural de los operadores lógicos
+       • Permite el uso de paréntesis para alterar la precedencia
+       • Soporta anidamiento arbitrario de expresiones
+
+   7.3 COMPLETITUD:
+       • Todas las expresiones generadas son fórmulas bien formadas
+       • Todas las fórmulas bien formadas pueden ser generadas
+       • Cumple con la regla v: "Sólo las expresiones que pueden ser
+         producidas mediante los incisos i al iv en un número finito
+         de pasos son fórmulas bien formadas de L"
+
+===============================================================================
+
+8. IMPLEMENTACIÓN EN PLY (Python Lex-Yacc)
+
+   8.1 TOKENS DEFINIDOS:
+       • VARIABLE: Variables proposicionales
+       • CONSTANTE: Constantes 0 y 1
+       • NEGACION: Operador ~
+       • CONJUNCION: Operador ^
+       • DISYUNCION: Operador o
+       • IMPLICACION: Operador =>
+       • BICONDICIONAL: Operador <=>
+       • PARIZQ: Paréntesis izquierdo (
+       • PARDER: Paréntesis derecho )
+
+   8.2 FUNCIONES DE PRODUCCIÓN:
+       • p_formula: Implementa P1
+       • p_expresion_variable: Implementa P2
+       • p_expresion_constante: Implementa P3
+       • p_expresion_negacion: Implementa P4
+       • p_expresion_conjuncion: Implementa P5
+       • p_expresion_disyuncion: Implementa P6
+       • p_expresion_implicacion: Implementa P7
+       • p_expresion_bicondicional: Implementa P8
+       • p_expresion_parentesis: Implementa P9
+
+===============================================================================
+
+Este documento define formalmente la gramática del Sistema Axiomático L
+implementada en el reconocedor de expresiones proposicionales.
+
+Fecha de creación: Febrero 2025
+Implementación: Python con PLY (Python Lex-Yacc)
+Visualizaciones: NetworkX y Matplotlib
